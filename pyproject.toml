@@ -1,5 +1,5 @@
 [project]
-name = "CipherToken"  
+name = "ciphertoken"  
 version = "0.1.0"
 description = "JWT library implemented in Rust for Python"
 authors = [
