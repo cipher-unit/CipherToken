@@ -1,0 +1,28 @@
+[project]
+name = "CipherToken"  
+version = "0.1.0"
+description = "JWT library implemented in Rust for Python"
+authors = [
+    { name = "Ehsan Amiri", email = "ehsan.amiri.prog@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.7"
+
+readme-content-type = "text/markdown"
+repository = "https://github.com/cipher-unit/CipherToken"
+homepage = "https://cipher-unit.github.io/CipherToken/"
+
+
+[build-system]
+requires = ["maturin>=1.0"]
+build-backend = "maturin"
+
+[project.urls]
+Homepage = "https://cipher-unit.github.io/CipherToken/"
+Repository = "https://github.com/cipher-unit/CipherToken"
+Documentation = "https://cipher-unit.github.io/CipherToken/"
+Issues = "https://github.com/cipher-unit/CipherToken/issues"
+
+
+[tool.maturin]
+include = ["ciphertoken/**/*.pyi"]
