@@ -1,34 +1,37 @@
-name: Build and Publish Rust Python Package
+name: Build Wheels
 
 on:
   push:
     branches: [ main ]
   pull_request:
+  release:
+    types: [published]
 
 jobs:
-  build_wheels:
-    name: Build wheels
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.16.2
+        run: pip install cibuildwheel
 
       - name: Build wheels
         env:
           CIBW_BUILD: "cp311-* cp312-*"
-          CIBW_SKIP: "*-musllinux_i686"
+          CIBW_SKIP: "*-win32 *-manylinux_i686"
           CIBW_ARCHS_LINUX: "x86_64 aarch64"
-          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_MACOS: "universal2"
           CIBW_ARCHS_WINDOWS: "AMD64"
-        run: python -m cibuildwheel --output-dir wheelhouse
+          CIBW_MANYLINUX_X86_64_IMAGE: "manylinux2014"
+          CIBW_MANYLINUX_AARCH64_IMAGE: "manylinux2014"
+          CIBW_BUILD_VERBOSITY: "1"
+        run: cibuildwheel --output-dir wheelhouse
 
       - uses: actions/upload-artifact@v4
         with:
@@ -36,9 +39,9 @@ jobs:
           path: wheelhouse/*.whl
 
   publish:
-    needs: build_wheels
+    needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'release'
 
     steps:
       - uses: actions/download-artifact@v4
@@ -47,9 +50,6 @@ jobs:
           path: wheelhouse
 
       - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: pypi-AgEIcHlwaS5vcmcCJGNmYWQxNDZmLWY2ZmEtNDQyMi05YzRjLTg5YTA4M2I0Yjk0YgACKlszLCJkZmRjMjNkNC1kNjVjLTRiMDQtOTdiNC0yZjkzM2ViMDVkNDYiXQAABiBP5y2z-_1hASM2frYv1GVHuFiL26Q6HCTSiEvs1_MoVA
-        run: |
-          python -m pip install twine
-          twine upload wheelhouse/*.whl
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: wheelhouse
