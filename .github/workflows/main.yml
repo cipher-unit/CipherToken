@@ -72,5 +72,5 @@ jobs:
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: pypi-AgEIcHlwaS5vcmcCJGNmYWQxNDZmLWY2ZmEtNDQyMi05YzRjLTg5YTA4M2I0Yjk0YgACKlszLCJkZmRjMjNkNC1kNjVjLTRiMDQtOTdiNC0yZjkzM2ViMDVkNDYiXQAABiBP5y2z-_1hASM2frYv1GVHuFiL26Q6HCTSiEvs1_MoVA
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: twine upload ./wheels/**/*.whl
