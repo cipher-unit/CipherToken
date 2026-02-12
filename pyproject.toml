@@ -1,6 +1,6 @@
 [project]
 name = "ciphertoken"  
-version = "0.1.0"
+version = "0.1.1"
 description = "JWT library implemented in Rust for Python"
 authors = [
     { name = "Ehsan Amiri", email = "ehsan.amiri.prog@example.com" }
